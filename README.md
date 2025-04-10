@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 # Ethical Hacking Tools 🛠️
 
 A collection of ethical hacking utilities built in Python for learning and practicing cybersecurity techniques.
-
-## 🐍 Tools
 
 ### ✅ MAC Changer
 A simple Python script that changes the MAC address of your selected interface using the command line.
@@ -12,4 +9,4 @@ A simple Python script that changes the MAC address of your selected interface u
 ```bash
 sudo python3 tools/mac_changer.py -i eth0 -m 02:11:22:33:44:55
 =======
-# Ethical-Hacking-Tools
+
