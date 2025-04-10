@@ -8,5 +8,3 @@ A simple Python script that changes the MAC address of your selected interface u
 #### Usage
 ```bash
 sudo python3 tools/mac_changer.py -i eth0 -m 02:11:22:33:44:55
-=======
-
