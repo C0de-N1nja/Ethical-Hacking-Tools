@@ -1,35 +1,48 @@
-🛡️ MAC Changer — Ethical Hacking Tool
-A simple Python script to change or revert the MAC address of a network interface. Useful for learning network spoofing and privacy techniques.
+# 🛡️ MAC Changer — Ethical Hacking Tool
 
-✅ Features
-Change MAC address via CLI
+A simple Python script to **change** or **revert** the MAC address of a network interface.  
+Useful for learning **network spoofing** and **privacy techniques**.
 
-Revert to original MAC
+---
 
-Saves original MAC automatically
+## ✅ Features
 
-⚙️ Requirements
-Python 3
+- Change MAC address via CLI  
+- Revert to original MAC  
+- Automatically saves original MAC  
 
-net-tools (ifconfig)
+---
 
-Run as sudo
+## ⚙️ Requirements
 
-🚀 Usage
-Change MAC:
+- Python 3  
+- `net-tools` (for `ifconfig`)  
+- Must be run with `sudo`  
 
-bash
-Copy
-Edit
+---
+
+## 🚀 Usage
+
+### 🔧 Change MAC Address
+```bash
 sudo python3 tools/mac_changer.py -i wlp3s0 -m 02:11:22:33:44:55
-Revert MAC:
+```
 
-bash
-Copy
-Edit
+### ♻️ Revert to Original MAC
+```bash
 sudo python3 tools/mac_changer.py -i wlp3s0 -o
-📁 Output
-Stores original MAC in original_mac.txt
+```
 
-⚠️ Disclaimer
-For educational use only. Do not use on unauthorized networks.
+---
+
+## 📁 Output
+
+- Saves original MAC in `original_mac.txt`
+
+---
+
+## ⚠️ Disclaimer
+
+> This tool is for **educational purposes only**.  
+> Do **not** use it on unauthorized networks.
+
