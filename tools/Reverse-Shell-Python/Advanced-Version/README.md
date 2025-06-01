@@ -185,6 +185,3 @@ Victim classifies and handles:
 This tool is intended **solely for educational use** and authorized ethical hacking engagements. Unauthorized access or usage of this tool on systems you do not own or have explicit permission to test is illegal. The author assumes no responsibility for any misuse or consequences thereof.
 
 ```
-
----
-
