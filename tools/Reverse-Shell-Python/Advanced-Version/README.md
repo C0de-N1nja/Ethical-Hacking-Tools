@@ -1,24 +1,24 @@
-
 # 🚀 Advanced Python Reverse Shell
 
 This **advanced version** of the Python reverse shell is a powerful upgrade over the basic version, designed with reliability, extended capabilities, and operational stealth in mind. It maintains the simplicity of Python while introducing features critical for realistic penetration testing and red teaming exercises.
 
-Unlike the basic version, which provides core command execution and a linear connection, this advanced version ensures persistent communication, intelligent command handling, and secure file transfers — making it a practical tool for ethical hackers.
+Unlike the basic version, which provides core command execution and a linear connection, this advanced version ensures persistent communication, intelligent command handling, **file transfers**, **remote screenshot capture**, and graceful session management — making it a practical tool for ethical hackers.
 
 ---
 
 ## 🆚 Basic vs Advanced: What's New?
 
-| Feature                      | Basic Version                    | Advanced Version                                                      |
-| ---------------------------- | ------------------------------- | ------------------------------------------------------------------- |
-| Persistent Reconnect          | ❌ Single connection attempt     | ✅ Reconnects every 5 seconds if listener is offline                |
-| File Download                | ❌ Not supported                 | ✅ Supported with pattern-based listing and exact match download    |
-| File Upload                  | ❌ Not supported                 | ✅ Send files from hacker to victim with integrity checks           |
-| Directory Navigation (`cd`)   | ✅ Supported                    | ✅ Improved, supports path echoing and default display              |
-| Command Output Handling       | ⚠️ Plaintext with limited fallback | ✅ Cross-platform decoding with `cp437` (Windows) and `utf-8` fallback |
-| Empty Command Output Handling | ❌ No feedback                  | ✅ "No output" feedback when silent commands are run                |
-| Graceful Exit (`stop`)        | ✅ Supported                   | ✅ Improved clean disconnection and shutdown                        |
-| Socket Reuse (SO_REUSEADDR)  | ❌ Not handled                 | ✅ Enables quick listener restarts without port binding errors      |
+| Feature                       | Basic Version                    | Advanced Version                                                      |
+|------------------------------|----------------------------------|------------------------------------------------------------------------|
+| Persistent Reconnect         | ❌ Single connection attempt      | ✅ Reconnects every 5 seconds if listener is offline                   |
+| File Download                | ❌ Not supported                  | ✅ Supported with pattern-based listing and exact match download       |
+| File Upload                  | ❌ Not supported                  | ✅ Send files from hacker to victim with integrity checks              |
+| Screenshot Capture           | ❌ Not supported                  | ✅ Victim captures and sends current screen to hacker                  |
+| Directory Navigation (`cd`)  | ✅ Supported                      | ✅ Improved, supports path echoing and default display                 |
+| Command Output Handling      | ⚠️ Plaintext with limited fallback | ✅ Cross-platform decoding with `cp437` (Windows) and `utf-8` fallback |
+| Empty Command Output Handling| ❌ No feedback                    | ✅ "No output" feedback when silent commands are run                   |
+| Graceful Exit (`stop`)       | ✅ Supported                      | ✅ Improved clean disconnection and shutdown                           |
+| Socket Reuse (SO_REUSEADDR)  | ❌ Not handled                    | ✅ Enables quick listener restarts without port binding errors         |
 
 ---
 
@@ -29,7 +29,8 @@ Unlike the basic version, which provides core command execution and a linear con
 Advanced-Version/
 ├── README.md                # You are here
 ├── advanced\_hacker.py       # Attacker script (listener and controller)
-└── advanced\_victim.py       # Victim payload (persistent reverse shell)
+├── advanced\_victim.py       # Victim payload (persistent reverse shell)
+└── screenshot.png           # Sample screenshot captured from victim (optional)
 
 ````
 
@@ -37,21 +38,24 @@ Advanced-Version/
 
 ## 💡 Core Features
 
-* **🔁 Reconnection Loop**: Victim automatically retries connecting to hacker every 5 seconds if disconnected.
-* **💻 Command Execution**: Cross-platform shell support (PowerShell, cmd, bash). Uses `subprocess.run` with output decoding.
-* **📂 `cd` Support**: Allows directory changes with confirmation, or just shows current directory if used alone.
-* **📥 File Download**:
-  * Request exact file or pattern (e.g., `report` lists `report.txt`, `report.pdf`, etc.).
-  * Select from matches for precise download.
-* **📤 File Upload**:
-  * Send files from hacker to victim securely.
-  * Hacker verifies file exists and is non-empty before sending.
-* **🛑 Graceful Termination**: The `stop` command cleanly shuts down both scripts.
-* **📡 Port Reuse**: Hacker script uses `SO_REUSEADDR` to allow instant port reuse after closure.
-* **⚙️ Robust File Protocol**:
-  * All file transfers are in binary.
-  * Transfers begin with an 8-byte size header.
-  * Size `0` signals "not found", "empty", or "canceled" conditions.
+- **🔁 Reconnection Loop**: Victim automatically retries connecting to hacker every 5 seconds if disconnected.
+- **💻 Command Execution**: Cross-platform shell support (PowerShell, cmd, bash). Uses `subprocess.run` with output decoding.
+- **📂 `cd` Support**: Allows directory changes with confirmation, or just shows current directory if used alone.
+- **📥 File Download**:
+  - Request exact file or pattern (e.g., `report` lists `report.txt`, `report.pdf`, etc.).
+  - Select from matches for precise download.
+- **📤 File Upload**:
+  - Send files from hacker to victim securely.
+  - Hacker verifies file exists and is non-empty before sending.
+- **🖼️ Screenshot Capture**:
+  - Issue the `screenshot` command to capture the victim's current screen.
+  - Saved locally on the hacker machine as `screenshot_<timestamp>.png`.
+- **🛑 Graceful Termination**: The `stop` command cleanly shuts down both scripts.
+- **📡 Port Reuse**: Hacker script uses `SO_REUSEADDR` to allow instant port reuse after closure.
+- **⚙️ Robust File Protocol**:
+  - All file transfers are in binary.
+  - Transfers begin with an 8-byte size header.
+  - Size `0` signals "not found", "empty", or "canceled" conditions.
 
 ---
 
@@ -66,7 +70,7 @@ hacker_ip = "YOUR_ATTACKER_IP"
 hacker_port = 10000
 ````
 
-Ensure both use the same values. On attacker machine, use `ip a` (Linux) or `ipconfig` (Windows) to find your IP.
+Ensure both use the same values. On the attacker machine, use `ip a` (Linux) or `ipconfig` (Windows) to find your IP.
 
 ---
 
@@ -94,14 +98,15 @@ It will continuously retry until the hacker connects.
 
 ## 💬 Commands You Can Use
 
-| Command                     | Description                                  |
-| --------------------------- | -------------------------------------------- |
-| `cd`                        | Show current directory                       |
-| `cd <path>`                 | Change directory                             |
-| `download <file or prefix>` | Download file (or match pattern) from victim |
-| `upload <filename>`         | Upload file from hacker to victim            |
-| `stop`                      | Cleanly terminate the session                |
-| *any other command*         | Executed as shell command on victim          |
+| Command                     | Description                                             |
+| --------------------------- | ------------------------------------------------------- |
+| `cd`                        | Show current directory                                  |
+| `cd <path>`                 | Change directory                                        |
+| `download <file or prefix>` | Download file (or match pattern) from victim            |
+| `upload <filename>`         | Upload file from hacker to victim                       |
+| `screenshot`                | Take a screenshot on the victim machine and download it |
+| `stop`                      | Cleanly terminate the session                           |
+| *any other command*         | Executed as shell command on victim                     |
 
 ---
 
@@ -132,6 +137,9 @@ File downloaded successfully!
 > upload backdoor.py
 File uploaded successfully!
 
+> screenshot
+Screenshot captured and saved as screenshot_20250601_193245.png
+
 > stop
 [*] Session terminated. Exiting.
 ```
@@ -145,6 +153,7 @@ cd Desktop is executed successfully!
 download pass is executed successfully!
 download pass_list.docx is executed successfully!
 upload backdoor.py is executed successfully!
+screenshot is executed successfully!
 stop is executed successfully!
 ```
 
@@ -154,7 +163,7 @@ stop is executed successfully!
 
 ### 🔄 Persistent Reconnect
 
-Victim attempts reconnection every 5 seconds. This is ideal when listener crashes or is temporarily offline.
+Victim attempts reconnection every 5 seconds. This is ideal when the listener crashes or is temporarily offline.
 
 ### 📜 Command Dispatch
 
@@ -163,6 +172,7 @@ Victim classifies and handles:
 * `cd`
 * `download`
 * `upload`
+* `screenshot`
 * `stop`
 * Any other command → routed to shell via `subprocess.run()`
 
@@ -176,7 +186,7 @@ Victim classifies and handles:
 
 * Windows: `cp437`
 * Linux/macOS: `utf-8`
-* Always fallback to `errors="replace"` to avoid crashes from malformed characters.
+* Always falls back with `errors="replace"` to avoid crashes from malformed characters.
 
 ---
 

