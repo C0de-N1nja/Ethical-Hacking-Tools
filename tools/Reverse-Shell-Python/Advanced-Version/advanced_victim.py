@@ -2,7 +2,6 @@ import socket
 import subprocess
 import time
 import os
-import glob
 import json
 import struct
 from datetime import datetime
@@ -161,7 +160,12 @@ while True:
                             continue
 
                     else:
-                        matched_files = glob.glob(file_name + ".*")
+                        files_and_dirs = os.listdir()
+                        matched_files = []
+                        for file in files_and_dirs:
+                            if file_name in file and "." in file:
+                                matched_files.append(file)
+                                
                         if len(matched_files) == 0:
                             file_exists = f"\nNo, the file ({file_name}) doesn't exist!"
                             full_response += file_exists
