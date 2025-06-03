@@ -28,8 +28,8 @@ Unlike the basic version — which provides core command execution and a linear 
 
 Advanced-Version/
 ├── README.md             # You are here
-├── advanced\_hacker.py    # Attacker script (listener + command handler)
-└── advanced\_victim.py    # Victim payload (persistent reverse shell)
+├── advanced_hacker.py    # Attacker script (listener + command handler)
+└── advanced_victim.py    # Victim payload (persistent reverse shell)
 
 ````
 
