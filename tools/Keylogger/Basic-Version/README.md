@@ -85,6 +85,3 @@ Do **not** use it on any device you do not own or have explicit permission to mo
 > The author assumes **no responsibility** for misuse.
 
 ```
-
----
-
