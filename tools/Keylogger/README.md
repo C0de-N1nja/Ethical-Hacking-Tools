@@ -65,5 +65,3 @@ pip install pynput
 This keylogger is part of the **`C0de-N1nja-Ethical-Hacking-Tools`** repository — a growing collection of Python-based cybersecurity utilities designed for hands-on learning, simulation, and ethical red team training.
 
 > **Explore responsibly. Learn deeply. Code like a Ninja. 🥷**
-
-```

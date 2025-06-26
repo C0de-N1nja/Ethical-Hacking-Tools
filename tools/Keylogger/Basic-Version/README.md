@@ -83,5 +83,3 @@ This script is intended **only for educational and ethical use**.
 Do **not** use it on any device you do not own or have explicit permission to monitor. Unauthorized use is illegal and unethical.
 
 > The author assumes **no responsibility** for misuse.
-
-```
