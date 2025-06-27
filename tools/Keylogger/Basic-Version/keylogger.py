@@ -1,5 +1,4 @@
 from pynput import keyboard
-from datetime import datetime
 
 class Keylogger:
     def __init__(self):
