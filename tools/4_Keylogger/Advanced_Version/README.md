@@ -49,7 +49,7 @@ While the basic keylogger simply logs raw keypresses, this version takes it to a
 
 ```
 
-\[CTRL + C], \[SHIFT + ENTER], \[ALT + TAB], \[CTRL + SHIFT + ESC]
+[CTRL + C], [SHIFT + ENTER], [ALT + TAB], [CTRL + SHIFT + ESC]
 
 ```
 
@@ -120,7 +120,7 @@ While the basic keylogger simply logs raw keypresses, this version takes it to a
 
 ```
 
-logs 01-07-2025\_03-20-55 AM.txt
+logs 01-07-2025_03-20-55 AM.txt
 
 ````
 
