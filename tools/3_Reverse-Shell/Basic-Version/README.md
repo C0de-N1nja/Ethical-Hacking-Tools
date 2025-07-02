@@ -138,8 +138,8 @@ Running this on machines or networks you do not **own or have written permission
 
 ## 🔗 Navigation
 
-⬅️ [Back to Reverse Shell Overview](../README.md)
-⬅️ [Back to All Tools](../../../README.md)
+- ⬅️ [Back to Reverse Shell Overview](../README.md)
+- ⬅️ [Back to All Tools](../../../README.md)
 
 ---
 
