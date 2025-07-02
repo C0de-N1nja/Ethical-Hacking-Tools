@@ -1,0 +1,25 @@
+# Python cache and bytecode
+__pycache__/
+*.pyc
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and output
+*.log
+*.txt
+logs*/
+*.png
+
+# Tool-specific outputs
+addressses.txt
+original_mac.txt
+
+# VSCode/IDE config
+.vscode/
+.idea/
+
+# Ignore compiled binaries or executables
+*.exe
+*.out
