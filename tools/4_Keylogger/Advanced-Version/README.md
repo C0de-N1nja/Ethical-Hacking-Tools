@@ -1,17 +1,20 @@
-# 🎯 Advanced Python Keylogger
+# 🎯 Advanced Python Keylogger — Ethical Hacking Utility
 
-This **Advanced Keylogger** is a stealthy, cross-platform surveillance utility built in Python. It is crafted for **ethical hacking**, **red teaming**, and **defensive security simulation** in authorized environments. Unlike the basic version, this tool records every keystroke with **intelligent context**—capturing modifier combinations, clipboard data, window focus, and even periods of user inactivity.
+This **Advanced Keylogger** is a stealthy, cross-platform surveillance utility built entirely in Python.  
+It is designed for **ethical hacking**, **red teaming**, and **defensive security simulation** within authorized environments.
 
-> ⚠️ This project is strictly for educational purposes. Unauthorized use of keyloggers is illegal and unethical.
+Unlike the basic version, this tool records every keystroke with full context — including modifier combos, clipboard events, active window titles, idle states, and more.
+
+> ⚠️ For educational use only. Unauthorized use of keyloggers is illegal and unethical.
 
 ---
 
-## 📁 Directory Structure
+## 📁 Folder Structure
 
 ```
 
 Advanced-Version/
-├── README.md               # You are here
+├── README.md               # Tool documentation (this file)
 └── advanced_keylogger.py   # Full-featured Python keylogger script
 
 ```
@@ -20,103 +23,90 @@ Advanced-Version/
 
 ## 🚀 Why This Version?
 
-While the basic keylogger simply logs raw keypresses, this version takes it to a **professional-grade** level—offering insights into real-world attack simulation with advanced logging behaviors.
+The Basic Keylogger logs raw keypresses.  
+This version takes it further — offering realistic simulation of stealth malware behavior for training, research, and red team scenarios.
 
 ---
 
 ## 🆚 Basic vs Advanced — Feature Comparison
 
-| Capability                    | Basic Version   | Advanced Version                               |
-|------------------------------|-----------------|------------------------------------------------|
-| Keystroke Logging            | ✅ Yes          | ✅ Yes (w/ modifier combos)                    |
-| Special Key Mapping          | ⚠️ Partial      | ✅ Full (Arrows, F-Keys, Media, etc.)          |
-| Modifier Detection           | ❌ No           | ✅ CTRL + ALT + SHIFT combos                   |
-| Active Window Tracking       | ❌ No           | ✅ Logs title + process name cross-platform    |
-| Idle/Resume Logging          | ❌ No           | ✅ Logs idle time and return to activity       |
-| Timestamped Session Logging  | ❌ No           | ✅ Begins with full timestamp + user info      |
-| Clipboard Monitoring         | ❌ No           | ✅ Monitors and logs copied content            |
-| UTF-8 Output Handling        | ❌ No           | ✅ Supports multilingual & special characters  |
-| Cross-Platform Compatibility | ✅ Yes          | ✅ Yes (Windows + Linux)                       |
+| Feature                     | Basic Version   | Advanced Version                               |
+|----------------------------|-----------------|------------------------------------------------|
+| Keystroke Logging          | ✅ Yes          | ✅ Yes (w/ modifier combos)                    |
+| Special Key Mapping        | ⚠️ Partial      | ✅ Full (F-keys, arrows, media, etc.)          |
+| Modifier Detection         | ❌ No           | ✅ CTRL + ALT + SHIFT detection                |
+| Active Window Tracking     | ❌ No           | ✅ Window title + process name                 |
+| Idle/Resume Detection      | ❌ No           | ✅ Detects and logs user inactivity            |
+| Timestamped Session Log    | ❌ No           | ✅ Timestamp + user/machine details            |
+| Clipboard Monitoring       | ❌ No           | ✅ Clipboard capture on change                 |
+| UTF-8 Logging              | ❌ No           | ✅ Multilingual and symbol-safe                |
+| Cross-Platform Support     | ✅ Yes          | ✅ Yes (Windows + Linux)                       |
 
 ---
 
-## 💡 Key Features in Detail
+## 💡 Key Features Explained
 
-### ⌨️ Keystroke Logging with Modifier Intelligence
+### ⌨️ Keystroke Logging with Modifier Awareness
 
-- Captures **every keypress** including letters, numbers, symbols, and special keys (arrows, function keys, etc.).
-- **Combines modifier keys dynamically** like:
-
+- Logs every key with readable formatting  
+- Combines modifier keys like:
 ```
 
-[CTRL + C], [SHIFT + ENTER], [ALT + TAB], [CTRL + SHIFT + ESC]
+[CTRL + S], [SHIFT + ENTER], [ALT + TAB], [CTRL + SHIFT + ESC]
 
 ```
-
-- Translates raw keycodes into human-readable labels (e.g., `[BACKSPACE]`, `[F12]`, `[VOL+]`)
-- Handles numpad keys, special characters, and invisible key combinations.
-
-> ✅ Gives a complete picture of user behavior, including shortcut usage and system navigation.
+- Supports: F-keys, navigation keys, media controls, numpad
 
 ---
 
-### 🖥️ Active Window + Process Monitoring (Cross-Platform)
+### 🖥️ Active Window + Process Tracking
 
-- Checks the **foreground window title** every 200ms.
+- Detects foreground window every 200ms  
 - Logs:
-- Full window title
-- Process name (e.g., `chrome.exe`, `code.exe`)
-- Supports:
+- Window title
+- Process name (e.g., `code.exe`, `chrome.exe`)  
+- Works on:
 - Windows (via `win32gui`, `psutil`)
-- Linux (via `xdotool` fallback)
-
-> 🔍 Correlates user input with application context — like comparing typing in Chrome vs VS Code.
+- Linux (via `xdotool`)
 
 ---
 
-### 💤 Idle Time Detection & Resume Logging
+### 💤 Idle Time Detection
 
-- Detects when the system goes **idle for over 60 seconds**.
+- Detects when the user is idle for 60+ seconds  
 - Logs:
-- `[User is Idle since: ...]`
-- `[User resumed at: ...]`
-- Uses a daemon thread to track inactivity in the background.
-
-> 🧠 Helps analysts understand behavioral pauses, session gaps, or suspicious downtimes.
+- `[User is Idle since: ...]`  
+- `[User resumed at: ...]`  
+- Useful for analyzing session pauses or break-ins
 
 ---
 
-### 📋 Clipboard Capture on Change
+### 📋 Clipboard Monitoring
 
-- Monitors clipboard content **every 5 seconds**.
-- Logs:
-- Timestamp of each copy event
-- Clipboard content
-- Ignores duplicate entries to reduce noise.
-
-> 🔐 Useful for detecting sensitive content (like copied passwords or credentials) without relying on typed keys.
+- Checks clipboard every 5 seconds  
+- Logs timestamp + content  
+- Skips duplicates to reduce noise
 
 ---
 
-### 🕵️ Threaded Stealth Design
+### 🧵 Threaded Architecture
 
-- **Multi-threaded architecture**:
-- Keystroke capture on main thread
-- Idle monitor, clipboard logger, and window tracker as daemon threads
-- All tasks are non-blocking and efficient.
-
-> ⚙️ Mimics stealth malware behavior — lightweight, persistent, and silent.
+- Main thread handles keylogging  
+- Daemon threads handle:
+- Idle tracking  
+- Clipboard monitoring  
+- Active window updates  
+- Non-blocking and efficient
 
 ---
 
-### 🧠 Session Intelligence
+### 🧠 Smart Session Logging
 
-- Begins each log file with:
+- Log file starts with:
 - Timestamp
-- Machine name (hostname)
-- Current logged-in user
-- Tracks first activity timestamp separately.
-- Log files named by timestamp:
+- Hostname
+- Logged-in user  
+- Logs are named like:
 
 ```
 
@@ -124,37 +114,31 @@ logs 01-07-2025_03-20-55 AM.txt
 
 ````
 
-> 📜 Provides structured forensic insight into user activity from start to end.
+---
+
+### 🧩 Cross-Platform Compatible
+
+- Automatically detects OS  
+- Uses dynamic imports for platform-specific modules  
+- Logs using UTF-8 for multilingual support
 
 ---
 
-### 🧩 OS-Aware Compatibility
+## ⚙️ Setup & Requirements
 
-- Automatically detects and adapts to Windows or Linux.
-- Uses dynamic imports and fallbacks for platform-specific modules.
-- Logs in **UTF-8** for multilingual and symbol-safe output.
-
-> 🌍 Cross-platform, localization-aware, and fault-tolerant.
-
----
-
-## ⚙️ Requirements & Setup
-
-### 🐍 Python Dependencies
-
-Install the base modules:
+### 📦 Base Dependencies (All Platforms)
 
 ```bash
 pip install pynput pyperclip
 ````
 
-#### ▶️ Windows Only:
+### 🪟 For Windows:
 
 ```bash
 pip install pywin32 psutil
 ```
 
-#### ▶️ Linux Only:
+### 🐧 For Linux:
 
 ```bash
 sudo apt install xdotool
@@ -164,20 +148,13 @@ sudo apt install xdotool
 
 ## ▶️ Running the Keylogger
 
-1. Open terminal in the `Advanced-Version/` directory.
-2. Run:
-
 ```bash
+cd Advanced-Version/
 python3 advanced_keylogger.py
 ```
 
-3. All logs will be saved with timestamps like:
-
-```
-logs 01-07-2025_03-20-55 AM.txt
-```
-
-> ✅ Press `ESC` to stop logging and exit safely.
+* Starts logging immediately
+* Press `ESC` to stop safely
 
 ---
 
@@ -195,7 +172,6 @@ Active Window: advanced_keylogger.py - Visual Studio Code (code.exe)
 password123
 
 [User is Idle since: 01-07-2025_03:24:00 AM]
-
 [User resumed at: 01-07-2025_03:25:08 AM]
 
 Active Window: GitHub - Chrome (chrome.exe)
@@ -203,23 +179,24 @@ Active Window: GitHub - Chrome (chrome.exe)
 
 ---
 
-## 🔐 Legal & Ethical Use
+## 🔐 Legal & Ethical Disclaimer
 
-This tool is for **educational and authorized security testing** only.
+This tool is intended for **educational use and authorized testing** only.
+Do **not** run this on devices or networks you do not own or have explicit written permission to test.
 
-By using this software, you agree to:
-
-* Only test systems you **own** or are **authorized to audit**
-* Never deploy it without **explicit consent**
-* Take **full responsibility** for all actions
-
-> ❌ The author assumes **no liability** for misuse or unethical deployment.
+> The author assumes **no responsibility** for misuse, illegal deployment, or damage caused.
 
 ---
 
-## 🌐 Part of a Larger Toolkit
+## 🔗 Navigation
 
-This advanced keylogger is part of the [`C0de-N1nja-Ethical-Hacking-Tools`](https://github.com/C0de-N1nja) collection — a practical, Python-based toolkit for red teamers, students, and security enthusiasts.
+* ⬅️ [Back to Keylogger Overview](../README.md)
+* ⬅️ [Back to All Tools](../../../README.md)
+* 🔹 [Go to Basic Version](../Basic-Version/README.md)
 
-> **Think like an attacker. Learn like a hacker. Defend like a pro. 🥷**
+---
 
+## 👨‍💻 Author
+
+**Muhammad Rehan Rashid**
+🧠 GitHub Alias: [`C0de-N1nja`](https://github.com/C0de-N1nja)
