@@ -62,7 +62,9 @@ This repo helps you explore areas like:
 
 ## 🧭 Quick Navigation
 
+- 🔗 [Basic Reverse Shell](tools/3_Reverse-Shell/Basic-Version/README.md)
 - 🔗 [Advanced Reverse Shell](tools/3_Reverse-Shell/Advanced-Version/README.md)
+- 🔗 [Basic Keylogger](tools/4_Keylogger/Basic-Version/README.md)
 - 🔗 [Advanced Keylogger](tools/4_Keylogger/Advanced-Version/README.md)
 
 ---
