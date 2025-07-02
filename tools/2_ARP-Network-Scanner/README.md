@@ -1,63 +1,86 @@
-# ARP Network Scanner
+# 🌐 ARP Network Scanner — Ethical Hacking Tool
 
-A simple Python-based ARP network scanner that identifies active devices on a local network using Scapy. It extracts their IP and MAC addresses and stores the information in a text file.
+A Python-based ARP scanner that identifies active devices on the local network using Scapy.  
+It extracts their IP and MAC addresses and saves the data in a text file.
 
-## 🚀 Features
-
-- Scans the local network via ARP requests.
-- Lists live hosts with IP and MAC addresses.
-- Saves results in `addressses.txt`.
-- Accepts custom network interface and IP range.
-- Command-line interface for flexible usage.
+> ⚠️ This tool is intended for **educational use only** in authorized testing environments.
 
 ---
 
-## 🧰 Requirements
+## ✅ Features
 
-- Python 3.6+
-- Linux-based system (tested on Kali Linux)
-- [Scapy](https://scapy.readthedocs.io/en/latest/) library
+- 🔍 Scans LAN using ARP packets
+- 🧾 Lists live hosts with IP and MAC addresses
+- 📁 Saves output to `addresses.txt`
+- 🛠 Accepts custom interface and optional IP range
+- 💻 Simple command-line interface
 
-Install Scapy using pip:
+---
+
+## ⚙️ Requirements
+
+- 🐍 Python 3.6+
+- 🖥️ Linux system (tested on Kali Linux)
+- 📦 [Scapy](https://scapy.readthedocs.io/en/latest/)
+
+> Install Scapy:
 ```bash
 pip install scapy
-```
+````
 
 ---
 
-## ⚙️ Usage
+## 🚀 Usage
+
+### 🔎 Basic Scan (Default Gateway Range)
 
 ```bash
 sudo python3 arp_network_scanner.py --interface eth0
 ```
 
-### Optional: Add IP Range
+### 🎯 Custom IP Range
 
 ```bash
 sudo python3 arp_network_scanner.py --interface eth0 --range 192.168.100.1
 ```
 
-- `--interface` or `-i`: Network interface to scan (e.g., `eth0`, `wlan0`)
-- `--range` or `-r`: (Optional) IP range to validate against the system default gateway
+> Replace `eth0` with your interface (e.g., `wlan0`, `enp0s3`)
+> `--range` is optional; if omitted, it auto-detects subnet
 
 ---
 
 ## 📁 Output
 
-Results are saved in `addressses.txt` in the following format:
+Results are saved to:
+
+```text
+addresses.txt
+```
+
+Sample output:
 
 ```
 IP: 192.168.100.4   MAC: aa:bb:cc:11:22:33
 IP: 192.168.100.5   MAC: dd:ee:ff:44:55:66
-...
 ```
 
 ---
 
-## 🛡️ Notes
+## 🧠 Notes
 
-- You must run the script with `sudo` or root privileges for packet crafting.
-- Only works on local networks (Layer 2).
-- Ensure your firewall/antivirus doesn't block ARP packets.
+* 🔐 Requires root (`sudo`) privileges for raw socket access
+* 🌐 Only works on Layer 2 local networks
+* 🧱 Firewalls or antivirus may block ARP packets
 
 ---
+
+## 🔗 Navigation
+
+⬅️ [Back to All Tools](../../README.md)
+
+---
+
+## 👨‍💻 Author
+
+**Muhammad Rehan Rashid**
+🧠 GitHub Alias: [`C0de-N1nja`](https://github.com/C0de-N1nja)
