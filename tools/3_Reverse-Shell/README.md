@@ -1,14 +1,20 @@
-# 🐍 Reverse Shell in Python
+# 🐚 Reverse Shell in Python — Basic & Advanced Versions
 
-This project demonstrates how a Python-based reverse shell can be built and enhanced in a modular and stealthy way. It is structured to show both a **Basic** version and an **Advanced** version of a reverse shell, offering a clear path from foundational learning to more robust, feature-rich tools — useful for ethical hacking, red teaming, or defensive simulation in cybersecurity.
+This module demonstrates how to build a **reverse shell** in Python — starting from a foundational one-time connection and scaling up to a robust, reconnecting, feature-rich remote access tool.
+
+It’s split into two versions:
+- 🔹 A **Basic** reverse shell for foundational understanding
+- 🔸 An **Advanced** reverse shell for real-world simulation, red teaming, or blue team detection practice
+
+> ⚠️ Use only in authorized testing environments. This project is strictly for educational and ethical hacking practice.
 
 ---
 
-## 📁 Directory Structure
+## 📁 Folder Structure
 
 ```
 
-Reverse-Shell-Python/
+Reverse-Shell/
 ├── README.md                  # General project overview (this file)
 ├── Basic-Version/
 │   ├── README.md              # Detailed explanation of the basic version
@@ -16,63 +22,88 @@ Reverse-Shell-Python/
 │   └── victim.py              # Basic reverse shell payload
 └── Advanced-Version/
     ├── README.md              # Detailed explanation of the advanced version
-    ├── advanced\_hacker.py     # Robust listener with upload/download & error handling
-    └── advanced\_victim.py     # Payload with reconnection, download/upload, and full shell support
+    ├── advanced_hacker.py     # Robust listener with upload/download & error handling
+    └── advanced_victim.py     # Payload with reconnection, download/upload, and full shell support
 
-```
-
----
-
-## 📜 What is a Reverse Shell?
-
-A reverse shell is a type of remote shell where the victim machine initiates a connection to the attacker’s machine, allowing the attacker to execute commands on the victim's system.
-
-> This is especially useful in scenarios where the victim is behind a firewall or NAT, and direct connections are not possible.
+````
 
 ---
 
-## 🧪 Versions Explained
+## 🧠 What is a Reverse Shell?
+
+A **reverse shell** is a remote access technique where a victim’s machine initiates a connection to the attacker's machine.  
+This allows the attacker to execute system-level commands on the victim — especially useful when the victim is behind a **firewall or NAT**.
+
+---
+
+## 🧪 Version Comparison
 
 ### ✅ Basic Version
-- One-time connection
-- Executes shell commands
-- Simple send/receive logic
-- Limited error handling
+- One-time socket connection
+- Simple command execution
+- Basic send/receive loop
+- Minimal error handling
 
-➡️ [View Basic Version Details](./Basic/README.md)
+📄 [View Basic Version README](./Basic-Version/README.md)
 
 ---
 
 ### 🚀 Advanced Version
-- Automatic reconnection if the listener is restarted
-- Command execution with encoding fallback (Windows/Linux compatible)
-- File download from victim to attacker
-- File upload from attacker to victim
-- Graceful disconnection and error handling
+- Persistent reconnection (listener restart-resistant)
+- File download/upload with progress
+- Cross-platform encoding (Windows/Linux safe)
+- Screenshot capture from victim
+- Robust error handling and graceful exit
 
-➡️ [View Advanced Version Details](./Advanced/README.md)
-
----
-
-## ⚠️ Disclaimer
-
-This tool is for educational and ethical hacking purposes only. You must obtain proper authorization before deploying this in any real-world environment. The author assumes no liability for misuse.
-
----
-
-## 🧠 Recommended Use Case
-
-Use this project to:
-- Learn reverse shell mechanics in Python
-- Practice handling sockets, encoding, and binary data
-- Simulate red teaming scenarios in controlled environments
+📄 [View Advanced Version README](./Advanced-Version/README.md)
 
 ---
 
 ## 🛠️ Requirements
 
-- Python 3.6+
-- Works on both Windows and Linux
+- 🐍 Python 3.6+
+- 🖥️ Works on Linux & Windows
+- Some advanced features require:
+  - `mss` for screenshots
+  - `os`, `socket`, `threading`, etc. (standard libs)
+
+Install any missing dependencies with:
+
+```bash
+pip install mss
+````
 
 ---
 
+## 🧠 Use Cases
+
+Use this project to:
+
+* 🧪 Understand socket programming
+* 🛠️ Simulate attacker behavior in a lab
+* 🔁 Build adaptable reverse shell tools
+* 🧩 Learn command execution, reconnection, and file transfer techniques
+
+---
+
+## 🔐 Ethical Disclaimer
+
+> This tool is for **educational and ethical hacking purposes only**.
+> Unauthorized use on systems or networks **you do not own or have explicit permission to test** is strictly prohibited.
+
+See [LICENSE](../../LICENSE) for full legal terms.
+
+---
+
+## 🔗 Navigation
+
+⬅️ [Back to All Tools](../../README.md)
+🔹 [Basic Reverse Shell](./Basic-Version/README.md)
+🔸 [Advanced Reverse Shell](./Advanced-Version/README.md)
+
+---
+
+## 👨‍💻 Author
+
+**Muhammad Rehan Rashid**
+🧠 GitHub Alias: [`C0de-N1nja`](https://github.com/C0de-N1nja)
