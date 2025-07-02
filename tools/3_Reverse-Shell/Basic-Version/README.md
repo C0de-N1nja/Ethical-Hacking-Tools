@@ -1,19 +1,20 @@
-# 🐍 Python Reverse Shell
+# 🐍 Python Reverse Shell — Basic Version
 
-This project is a basic **reverse shell** built using Python's `socket` module. It enables remote command execution on a victim machine once a connection is established to an attacker's listener.
+This project demonstrates a **basic reverse shell** using Python's built-in `socket` module.  
+It enables remote command execution on a victim machine once a connection is established with an attacker's listener.
 
-> ⚠️ This tool is strictly for **educational** and **ethical hacking** purposes on systems you own or have permission to test. Unauthorized use is illegal.
+> ⚠️ For **educational and ethical hacking** purposes only. Do **not** use this on unauthorized systems or networks.
 
 ---
 
-## 📁 Project Structure
+## 📁 Folder Contents
 
 ```
 
 Basic-Version/
 ├── hacker.py         # Attacker script (command and control)
 ├── victim.py         # Victim script (connects back to attacker)
-├── README.md         # Project documentation
+└── README.md         # This file
 
 ````
 
@@ -21,44 +22,38 @@ Basic-Version/
 
 ## 🧠 How It Works
 
-- The attacker (`hacker.py`) listens for incoming connections.
-- The victim (`victim.py`) tries to connect to the attacker repeatedly (every 5 seconds if offline).
-- Once connected, the attacker can:
-  - Send system commands to the victim.
-  - Change directories.
-  - Execute silent commands like `mkdir`.
-  - Terminate the session gracefully.
+- 🧷 `victim.py` continuously attempts to connect to the attacker's IP and port.
+- 🖥️ `hacker.py` listens for incoming connections and provides a command prompt.
+- Once connected:
+  - Commands are sent from attacker to victim.
+  - Output is returned and displayed.
+  - Commands like `cd`, `mkdir`, `type`, and others are supported.
 
 ---
 
 ## ✨ Features
 
-- **Persistent Connection Attempts:** Victim continuously tries to connect if attacker is offline.
-- **Directory Navigation:** Support for `cd` command with current directory display.
-- **Silent Command Handling:** Commands that don’t produce output return success messages.
-- **Command Execution:** Execute arbitrary shell commands remotely.
-- **Graceful Termination:** `stop` command cleanly closes the connection.
-- **Error Handling:** Errors and failed commands return meaningful output.
-- **Cross-Platform Compatibility:** Works on Windows and Linux (commands may vary).
+- 🔁 **Persistent connection**: Victim retries every 5 seconds if attacker is offline
+- 📂 **Directory navigation**: Supports `cd`, `cd ..`, etc.
+- ⚙️ **Silent command support**: Shows success messages even when command has no output
+- 🔐 **Graceful exit**: `stop` command cleanly closes the session
+- 🌐 **Cross-platform**: Works on Linux and Windows
+- ❌ **No external libraries** needed (pure `socket` + built-ins)
 
 ---
 
 ## ⚙️ Setup Instructions
 
-### ✅ Step 1: Configure IP and Port
+### 🔧 1. Configure IP and Port
 
-Both `hacker.py` and `victim.py` must have the same IP and port set in their code.
+In **both scripts**, set:
 
-#### In both files:
 ```python
-hacker_ip = "192.168.100.17"  # Replace with attacker's IP address
-hacker_port = 10000           # Port to use
+hacker_ip = "192.168.100.17"  # Replace with your attacker's IP
+hacker_port = 10000           # Port to listen/connect on
 ````
 
-> 📌 Use your **local IP address** if testing on a local network. You can find it using:
->
-> * On Windows: `ipconfig`
-> * On Linux/macOS: `ip a` or `ifconfig`
+> Use `ipconfig` (Windows) or `ifconfig` / `ip a` (Linux) to find your IP
 
 ---
 
@@ -70,9 +65,9 @@ hacker_port = 10000           # Port to use
 python3 hacker.py
 ```
 
-* Starts a TCP listener.
-* Waits for a victim to connect.
-* Prompts you to enter commands after connection.
+* Starts a TCP listener
+* Waits for victim to connect
+* Prompts for commands after connection
 
 ### 🧷 On Victim Machine (`victim.py`)
 
@@ -80,26 +75,26 @@ python3 hacker.py
 python3 victim.py
 ```
 
-* Tries to connect to the attacker's IP and port.
-* Executes any commands sent by the attacker.
+* Attempts to connect to attacker
+* Executes received commands
 
-> If the attacker is not online, it will retry every 5 seconds.
+> If the attacker isn’t available, victim retries every 5 seconds.
 
 ---
 
-## 💡 Supported Commands and Behaviors
+## 💡 Supported Commands
 
-| Command            | Behavior                                          |
-| ------------------ | ------------------------------------------------- |
-| `cd`               | Shows current working directory on victim.        |
-| `cd path`          | Changes working directory on victim.              |
-| `mkdir foldername` | Creates a folder (no output unless error).        |
-| `type filename`    | Displays contents of file (like `cat` on Linux).  |
-| `dir` / `ls`       | Lists directory contents.                         |
-| Any shell command  | Executes and returns output.                      |
-| `stop`             | Gracefully ends the session from the hacker side. |
+| Command           | Behavior                        |
+| ----------------- | ------------------------------- |
+| `cd`              | Show current working directory  |
+| `cd <path>`       | Change working directory        |
+| `mkdir <folder>`  | Create a folder (shows success) |
+| `type <file>`     | Read a file (Windows)           |
+| `ls`, `dir`       | List directory contents         |
+| Any shell command | Execute and return output       |
+| `stop`            | Gracefully disconnect           |
 
-### Example Interaction
+### 🧪 Example Interaction
 
 ```bash
 Enter command to execute on victim: cd
@@ -114,30 +109,41 @@ password123!
 
 ---
 
-## 🧪 Output Handling
+## 📦 Output Handling
 
-* If a command gives **no output**, a success message is shown anyway:
-
-  ```
-  mkdir test executed successfully (no output)!
-  ```
-* All errors are captured and sent back.
+* Success messages shown even if command produces no output
+* Errors (e.g., command not found) are returned to attacker
 
 ---
 
-## 🔒 Limitations & Ideas for Improvement
+## 🔒 Limitations & Future Improvements
 
-| Area          | Current Status            | Suggestions                       |
-| ------------- | ------------------------- | --------------------------------- |
-| Encryption    | ❌ Plaintext communication | Use `ssl` or `cryptography` lib   |
-| Multi-client  | ❌ Single client only      | Use threading or multiprocessing  |
-| File transfer | ❌ Not implemented         | Add upload/download functionality |
-| Stealth       | ❌ Not hidden              | Convert to background task        |
+| Area          | Current Status           | Suggested Upgrade                   |
+| ------------- | ------------------------ | ----------------------------------- |
+| Encryption    | ❌ Unencrypted            | Add SSL/TLS or symmetric encryption |
+| Multi-client  | ❌ Single connection only | Use threading for multiple victims  |
+| File transfer | ❌ Not supported          | Add upload/download functionality   |
+| Stealth       | ❌ Runs visibly           | Convert to daemon/background task   |
+
+---
+
+## 📜 Legal & Ethical Disclaimer
+
+This project is provided for **educational use only**.
+Running this on machines or networks you do not **own or have written permission to test** is illegal.
+
+> The author is **not responsible** for any misuse or illegal activity involving this code.
 
 ---
 
-## 📜 Legal Disclaimer
+## 🔗 Navigation
 
-This project is intended for **educational use only**. Running this code on machines you do not own or lack permission to test is **illegal** and punishable by law. The creator is **not responsible** for any misuse.
+⬅️ [Back to Reverse Shell Overview](../README.md)
+⬅️ [Back to All Tools](../../../README.md)
 
 ---
+
+## 👨‍💻 Author
+
+**Muhammad Rehan Rashid**
+🧠 GitHub Alias: [`C0de-N1nja`](https://github.com/C0de-N1nja)
