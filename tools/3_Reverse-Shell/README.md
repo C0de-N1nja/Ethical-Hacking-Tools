@@ -97,9 +97,9 @@ See [LICENSE](../../LICENSE) for full legal terms.
 
 ## 🔗 Navigation
 
-⬅️ [Back to All Tools](../../README.md)
-🔹 [Basic Reverse Shell](./Basic-Version/README.md)
-🔸 [Advanced Reverse Shell](./Advanced-Version/README.md)
+- ⬅️ [Back to All Tools](../../README.md)  
+- 🔹 [Basic Reverse Shell](./Basic-Version/README.md)  
+- 🔸 [Advanced Reverse Shell](./Advanced-Version/README.md)
 
 ---
 
